@@ -22,11 +22,14 @@ function handleConnection(socket){
     console.log(socket);
 }
 
+const sockets = [];
+
 wss.on("connection", (socket) => {
+    sockets.push(socket);
     console.log("Connected to Browser 🟩");
     socket.on("close", () => console.log("Disconnected From the Browser 🟥"));
     socket.on("message", (message) => {
-        console.log(message.toString('utf8'));
+        sockets.forEach((aSocket) => aSocket.send(message.toString('utf8')));
     });
     socket.send("hello!!!");
 });
