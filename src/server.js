@@ -18,10 +18,6 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server });
 
-function handleConnection(socket){
-    console.log(socket);
-}
-
 const sockets = [];
 
 wss.on("connection", (socket) => {
@@ -34,8 +30,12 @@ wss.on("connection", (socket) => {
         switch (message.type){
             case "new_message":
                 sockets.forEach((aSocket) => aSocket.send(`${socket.nickname}: ${message.payload}`));
+                break;
             case "nickname":
                 socket["nickname"] = message.payload;
+                break;
+            default:
+                console.log("message error");
         }
     });
 });
